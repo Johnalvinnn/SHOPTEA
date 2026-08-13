@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SHOPTEA - Cart</title>
+
+    <style>
+        body {
+            background-image: url("cafe1.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            color: rgb(248, 195, 60);
+        }
+
+        button {
+            background-color: #6F4E37;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<center>
+
+<h1>SHOPTEA - CART 🛒</h1>
+
+<hr>
+
+<h2>YOUR CART</h2>
+
+<table border="2" width="750">
+
+    <tr>
+        <th>PRODUCT</th>
+        <th>PRICE</th>
+        <th>QUANTITY</th>
+        <th>SUBTOTAL</th>
+        <th>REMOVE</th>
+    </tr>
+
+    <tbody id="cartItems"></tbody>
+
+    <tr>
+        <th colspan="3">TOTAL</th>
+
+        <th colspan="2">
+            $<span id="total">0.00</span>
+        </th>
+    </tr>
+
+</table>
+
+<br>
+
+<button onclick="clearCart()">
+    CLEAR CART
+</button>
+
+<br><br>
+
+<a href="Payment.html">
+    <button>💳 MODE OF PAYMENT</button>
+</a>
+
+<br><br>
+
+<a href="home.html">
+    <button>BACK TO SHOP</button>
+</a>
+
+
+<script>
+
+function displayCart() {
+
+    let cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+    let cartItems =
+        document.getElementById("cartItems");
+
+    let total = 0;
+
+    cartItems.innerHTML = "";
+
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    Your cart is empty.
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    cart.forEach(function(item, index) {
+
+        let subtotal =
+            item.price * item.quantity;
+
+        total += subtotal;
+
+
+        cartItems.innerHTML += `
+
+            <tr>
+
+                <td>${item.name}</td>
+
+                <td>
+                    $${item.price.toFixed(2)}
+                </td>
+
+                <td>
+                    ${item.quantity}
+                </td>
+
+                <td>
+                    $${subtotal.toFixed(2)}
+                </td>
+
+                <td>
+
+                    <button
+                        onclick="removeItem(${index})">
+                        REMOVE
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    document.getElementById("total")
+        .textContent = total.toFixed(2);
+
+}
+
+
+function removeItem(index) {
+
+    let cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.splice(index, 1);
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    displayCart();
+
+}
+
+
+function clearCart() {
+
+    localStorage.removeItem("cart");
+
+    displayCart();
+
+}
+
+
+displayCart();
+
+</script>
+
+</center>
+
+</body>
+</html>
